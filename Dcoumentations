@@ -1,1 +1,702 @@
 
+1. Lab Objectives
+
+The primary objectives of this project were to:
+
+* Understand the difference between standard users and privileged users.
+* Configure Microsoft Entra Privileged Identity Management.
+* Configure eligible rather than permanent administrative access.
+* Implement just-in-time privileged access.
+* Require MFA when activating privileged roles.
+* Require justification for privileged activation.
+* Configure approval-based privileged access.
+* Implement PIM for cloud-only security groups.
+* Demonstrate temporary group membership.
+* Configure password writeback for synchronized users.
+* Test self-service password reset for an on-premises synchronized user.
+* Review PIM audit activity.
+* Understand the relationship between on-premises Active Directory and Microsoft Entra ID.
+* Apply least-privilege principles to IAM administration.
+
+
+2. Lab Environment
+
+On-Premises Environment
+
+* Microsoft Active Directory Domain Services
+* Windows Server domain controller
+* On-premises users
+* On-premises security groups
+* Microsoft Entra Connect
+* Password hash synchronization
+* Password writeback
+
+Cloud Environment
+
+* Microsoft Entra ID
+* Microsoft Entra admin center
+* Microsoft Entra Privileged Identity Management
+* PIM for Microsoft Entra roles
+* PIM for Groups
+* Microsoft Authenticator MFA
+* Microsoft Entra audit logs
+
+
+
+3. Hybrid Identity Architecture
+
+The lab uses a hybrid identity model in which on-premises Active Directory identities are synchronized to Microsoft Entra ID.
+
+                    ON-PREMISES
+                 Active Directory
+                        |
+                        |
+                 Entra Connect
+                        |
+                        v
+              Microsoft Entra ID
+                        |
+        +---------------+---------------+
+        |               |               |
+        v               v               v
+      Users           Groups           PIM
+                                        |
+                         +--------------+--------------+
+                         |                             |
+                         v                             v
+                 Entra Roles                    PIM for Groups
+                         |                             |
+                         v                             v
+                 Eligible Access              JIT Membership
+
+On-premises users and groups were synchronized to Microsoft Entra ID through the configured synchronization service.
+
+Cloud-only privileged-access groups were maintained separately to the PIM for Groups exercise.
+
+
+
+
+4. Hybrid User Synchronization
+
+A test user was created in the on-premises Active Directory environment and synchronized into Microsoft Entra ID.
+
+The synchronization process demonstrated:
+
+On-Premises AD User
+        |
+        v
+Microsoft Entra Connect
+        |
+        v
+Microsoft Entra ID
+
+The synchronized user became visible in Microsoft Entra after synchronization completed.
+
+An important IAM concept demonstrated by this exercise was that:
+
+Synchronizing a user to Microsoft Entra does not automatically make that user an administrator.
+
+The user’s administrative capabilities depend on the roles and permissions assigned to the account.
+
+5. Password Writeback and Self-Service Password Reset
+
+One of the initial challenges in the lab involved attempting to reset the password of an on-premises synchronized user from Microsoft Entra.
+
+The initial password-reset attempt failed because the on-premises configuration did not permit the cloud-based password reset operation.
+
+The environment was then configured to support password writeback.
+
+The following functionality was enabled:
+
+* Password writeback for synchronized users
+* Password writeback through the configured Microsoft Entra synchronization service
+* Self-service password reset
+* MFA verification for password reset
+
+The on-premises password policy was also reviewed.
+
+After the configuration was completed, the synchronized user successfully performed a password reset through Microsoft’s password-reset experience.
+
+The resulting workflow was:
+
+User
+ |
+ | Password reset request
+ v
+Microsoft Entra
+ |
+ | MFA verification
+ v
+Password reset
+ |
+ | Password writeback
+ v
+On-Premises Active Directory
+
+This demonstrated how Microsoft Entra can provide cloud-based self-service password reset while maintaining the user’s identity in the on-premises Active Directory environment.
+
+
+
+6. Standard User Access vs Administrative Access
+
+An important IAM concept demonstrated during the project was the difference between authentication, directory visibility, and authorization.
+
+Simply having a Microsoft Entra account does not automatically provide administrative privileges.
+
+Standard users may have the ability to view certain directory information, while administrative operations require appropriate Microsoft Entra roles.
+
+Examples of Microsoft Entra administrative roles include:
+
+* Directory Readers
+* User Administrator
+* Global Administrator
+* Privileged Role Administrator
+* Other specialized administrative roles
+
+The project focused on assigning privileges only when required rather than permanently granting excessive administrative access.
+
+7. Privileged Identity Management
+
+Microsoft Entra Privileged Identity Management was used to manage privileged role assignments.
+
+Instead of permanently assigning administrative privileges, the PIM test account was configured with eligible access.
+
+Traditional Permanent Access
+
+User
+ |
+ +---- Permanent Administrator
+
+Permanent administrative access creates unnecessary standing privilege.
+
+PIM-Based Access
+
+User
+ |
+ +---- Eligible
+          |
+          v
+       Activate
+          |
+          v
+   Temporary Privilege
+          |
+          v
+        Expire
+
+The PIM model was used to demonstrate just-in-time privileged access.
+
+
+8. PIM Test Account
+
+A dedicated PIM test account was used to demonstrate privileged access management.
+
+The account was configured as an eligible administrator rather than receiving permanent administrative access.
+
+The user then signed into Microsoft Entra and activated the eligible privilege.
+
+MFA authentication was required during the privileged activation workflow.
+
+This demonstrated the principle:
+
+Users should receive privileged access only when they need it.
+
+
+9. MFA-Protected Privileged Activation
+
+Microsoft Authenticator MFA was incorporated into the privileged-access workflow.
+
+The PIM test account was required to authenticate using MFA before privileged access could be activated.
+
+The workflow was:
+
+PIM Test Account
+       |
+       v
+Request Activation
+       |
+       v
+MFA Authentication
+       |
+       v
+Justification
+       |
+       v
+Privilege Activated
+
+This provides an additional security control against compromised credentials.
+
+A compromised password alone should not be sufficient to complete a privileged activation when MFA is required.
+
+
+
+10. Privileged Access Justification
+
+The PIM activation workflow was configured to require a justification.
+
+An example justification used during the lab was:
+
+Testing JIT privileged group access for IAM/PAM lab.
+
+This creates an administrative record explaining why privileged access was requested.
+
+Justification provides:
+
+* Accountability
+* Auditability
+* Operational visibility
+* Better incident investigation
+* Evidence of why privileged access was used
+
+
+11. PIM Audit Activity
+
+PIM audit activity was reviewed after performing role assignments and activation operations.
+
+The audit records demonstrated events such as:
+
+* Eligible member added to role
+* PIM activation requested
+* PIM activation completed
+* Role assignment activity
+* Requestor
+* Target role
+* Scope
+* Timestamp
+
+The workflow was:
+
+PIM Test
+   |
+   | Request activation
+   v
+PIM
+   |
+   | Record request
+   v
+Audit Logs
+   |
+   | Activation completed
+   v
+Temporary Privileged Access
+
+This demonstrated how privileged identity activity can be investigated after administrative access is used.
+
+
+
+12. PIM for Groups
+
+The second major portion of the project involved implementing PIM for Groups.
+
+A cloud-only security group named:
+
+PAM-JIT-ACCESS
+
+was created specifically for the PAM exercise.
+
+The group was intentionally kept separate from the existing on-premises security groups.
+
+
+
+13. On-Premises Groups vs Cloud-Only PAM Group
+
+The lab already contained several security groups created in on-premises Active Directory.
+
+Examples included:
+
+GG-HR-SECURITY-MANAGER
+GG-HR-SECURITY-USER
+GG-IAM-PRIVILEGE-ADMINS
+GG-IT-SECURITY-USER
+
+These groups were synchronized into Microsoft Entra.
+
+They represent the hybrid/on-premises identity-management portion of the lab.
+
+A separate cloud-only group was created:
+
+PAM-JIT-ACCESS
+
+This group was used specifically for the PIM for Groups exercise.
+
+The separation demonstrated the difference between synchronized groups and cloud-only privileged-access groups.
+
+ON-PREMISES GROUPS
+        |
+        v
+Microsoft Entra Connect
+        |
+        v
+Microsoft Entra ID
+
+versus:
+
+CLOUD-ONLY PAM GROUP
+        |
+        v
+Microsoft Entra PIM
+        |
+        v
+JIT Membership
+
+
+
+14. PIM for Groups Configuration
+
+The PAM-JIT-ACCESS group was onboarded into Privileged Identity Management.
+
+The PIM Test account was assigned:
+
+Role: Member
+Assignment Type: Eligible
+
+This means the user was not permanently active as a member of the group.
+
+Instead, the user was eligible to activate the membership when required.
+
+PIM Test
+   |
+   +---- Eligible Member
+              |
+              | Activate
+              v
+       PAM-JIT-ACCESS
+              |
+              v
+       Active Member
+
+
+
+15. JIT Group Activation
+
+The PIM Test account activated its eligible membership.
+
+The activation was visible under:
+
+PIM → My roles → Groups → Active assignments
+
+The resulting assignment showed:
+
+* Group: PAM-JIT-ACCESS
+* Role: Member
+* Group type: Security
+* Membership: Direct
+* State: Activated
+* Limited activation duration
+
+The user was then visible as a member of the group while the activation was active.
+
+This successfully demonstrated just-in-time group membership.
+
+
+
+16. Temporary Privileged Access
+
+The key security benefit of the implementation is that privileged membership is temporary.
+
+Before activation:
+
+PIM Test
+   |
+   +---- Eligible
+
+During activation:
+
+PIM Test
+   |
+   +---- Active Member
+             |
+             v
+       PAM-JIT-ACCESS
+
+After expiration:
+
+PIM Test
+   |
+   +---- Eligible
+
+The user returns to an eligible state rather than maintaining permanent membership.
+
+This demonstrates the reduction of standing privilege provided by PIM.
+
+
+
+17. Approval-Based Access
+
+The PIM group configuration was also used to demonstrate controlled activation and approval.
+
+The intended workflow was:
+
+PIM Test
+   |
+   | Request activation
+   v
+MFA
+   |
+   v
+Justification
+   |
+   v
+Approval Request
+   |
+   v
+Administrator Approval
+   |
+   v
+Temporary Membership
+   |
+   v
+Expiration
+
+This introduces an additional authorization control for sensitive privileged access.
+
+For higher-risk administrative groups, requiring approval can prevent a user from independently activating privileged access.
+
+
+18. Directory Readers
+
+The Directory Readers role was used to demonstrate a lower-risk, read-oriented administrative permission.
+
+Directory Readers provides directory read capabilities rather than broad administrative modification rights.
+
+This helped demonstrate the difference between:
+
+READ ACCESS
+     vs.
+ADMINISTRATIVE WRITE ACCESS
+
+A user with Directory Readers should not be treated as equivalent to a Global Administrator or User Administrator.
+
+This supports the principle of least privilege.
+
+
+19. IAM/PAM Security Controls Demonstrated
+
+The project demonstrates several major identity-security principles.
+
+Least Privilege
+
+Users receive only the privileges necessary for their role.
+
+Just-In-Time Access
+
+Administrative access is activated only when required.
+
+MFA
+
+Privileged activation requires stronger authentication.
+
+Separation of Duties
+
+Administrative responsibilities can be separated between requesters and approvers.
+
+Temporary Privilege
+
+Privileged access automatically expires.
+
+Auditability
+
+PIM records privileged-access requests and activation activity.
+
+Hybrid Identity
+
+On-premises identity and cloud identity can coexist while maintaining separate administrative boundaries.
+
+
+20. Security Benefits
+
+The implemented architecture reduces the risks associated with standing administrative privileges.
+
+Without PIM
+
+Administrator
+      |
+      +---- Permanent Privilege
+
+If the account is compromised, an attacker may immediately inherit those privileges.
+
+With PIM
+
+User
+ |
+ +---- Eligible
+        |
+        +---- MFA
+        |
+        +---- Justification
+        |
+        +---- Approval
+        |
+        +---- Temporary Activation
+        |
+        +---- Automatic Expiration
+
+This provides significantly greater control over privileged identity access.
+
+
+21. Evidence Collected
+
+Screenshots were captured throughout the project to document the implementation.
+
+Recommended evidence included:
+
+Screenshot 1 — Hybrid User Synchronization
+
+Shows the on-premises test user synchronized into Microsoft Entra.
+
+Screenshot 2 — Password Writeback
+
+Shows the Microsoft Entra password-reset/on-premises integration configuration.
+
+Screenshot 3 — Successful Password Reset
+
+Shows the successful self-service password-reset workflow.
+
+Screenshot 4 — PIM Eligible Assignment
+
+Shows the PIM Test account listed as eligible.
+
+Screenshot 5 — PIM Activation
+
+Shows the PIM Test account activating its eligible role.
+
+Screenshot 6 — PIM Audit Log
+
+Shows recorded PIM activation and assignment events.
+
+Screenshot 7 — Cloud-Only PAM Group
+
+Shows PAM-JIT-ACCESS in Microsoft Entra.
+
+Screenshot 8 — Eligible Group Assignment
+
+Shows PIM Test listed as an eligible member.
+
+Screenshot 9 — Active Group Assignment
+
+Shows PAM-JIT-ACCESS in an activated state.
+
+Screenshot 10 — Active Group Membership
+
+Shows PIM Test appearing as a group member while the JIT activation is active.
+
+Screenshot 11 — Approval Workflow
+
+Shows the privileged-access approval workflow.
+
+
+22. Skills Demonstrated
+
+This project demonstrates practical experience with:
+
+* Microsoft Entra ID
+* Microsoft Entra Connect
+* Active Directory
+* Hybrid identity
+* Identity synchronization
+* Password writeback
+* Self-service password reset
+* MFA
+* Role-Based Access Control (RBAC)
+* Privileged Identity Management (PIM)
+* Privileged Access Management (PAM)
+* PIM for Groups
+* Just-In-Time access
+* Eligible role assignments
+* Temporary privileged access
+* Approval workflows
+* Directory Readers
+* User administration
+* IAM auditing
+* Least privilege
+* Separation of duties
+
+
+23. Key Lessons Learned
+
+1. A synchronized user is not automatically an administrator
+
+Synchronization provides identity synchronization; it does not automatically grant administrative privileges.
+
+2. Eligible is different from Active
+
+An eligible user has the ability to request or activate access but does not necessarily hold the privilege continuously.
+
+3. PIM reduces standing privilege
+
+Instead of keeping administrative roles permanently assigned, privileges can be activated only when needed.
+
+4. MFA strengthens privileged access
+
+A password alone should not be sufficient for sensitive administrative activation.
+
+5. Groups can be used as privileged-access boundaries
+
+PIM for Groups allows organizations to control temporary membership in security groups.
+
+6. Hybrid and cloud-only groups have different management considerations
+
+On-premises synchronized groups should generally be managed from their authoritative on-premises source, while cloud-only groups can be managed directly through Microsoft Entra.
+
+7. Audit logs are critical
+
+PIM provides evidence of who requested, activated, and received privileged access.
+
+
+24. Future Enhancements
+
+Future phases of the project can include:
+
+* Microsoft Sentinel integration for PIM monitoring
+* KQL queries for privileged-role activation
+* Detection of unusual PIM activation
+* Alerts for Global Administrator activation
+* Conditional Access policies
+* Risk-based authentication
+* Access Reviews
+* PIM for Azure resources
+* Azure RBAC
+* Custom least-privilege roles
+* Joiner-Mover-Leaver automation
+* Automated privileged-access reporting
+* Microsoft Graph investigation of role assignments
+* Incident-response workflows for compromised privileged accounts
+
+
+25. Project Outcome
+
+The lab successfully demonstrated a practical Microsoft Entra IAM/PAM implementation.
+
+The final workflow provides:
+
+                 HYBRID IDENTITY
+                       |
+                       v
+                Microsoft Entra
+                       |
+              +--------+--------+
+              |                 |
+              v                 v
+          IAM/RBAC             PIM
+                                |
+                +---------------+---------------+
+                |               |               |
+                v               v               v
+               MFA        Justification     Approval
+                                |
+                                v
+                         JIT Privilege
+                                |
+                                v
+                         Temporary Access
+                                |
+                                v
+                           Expiration
+                                |
+                                v
+                          Audit Logging
+
+The project demonstrates how organizations can move away from permanent administrative privileges toward a controlled least-privilege, just-in-time privileged-access model.
+
+
+
