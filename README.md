@@ -6,7 +6,7 @@ This project demonstrates a hybrid Identity and Access Management (IAM) environm
 
 The objective was to implement and monitor identity security controls using an enterprise-style IAM and security monitoring workflow.
 
-⸻
+
 
 **Lab Architecture**
 
@@ -22,7 +22,7 @@ The objective was to implement and monitor identity security controls using an e
 
 Evidence:
 
-⸻
+
 
 **Hybrid Identity Implementation**
 
@@ -46,7 +46,7 @@ Evidence:
 <img width="959" height="464" alt="Screenshot 2026-10-28 221348" src="https://github.com/user-attachments/assets/46c4c392-7610-4096-8822-c4e50fee7632" />
 
 
-⸻
+
 
 **Active Directory Least Privilege**
 
@@ -73,7 +73,7 @@ Evidence:
 <img width="1280" height="720" alt="pass reset access denied" src="https://github.com/user-attachments/assets/ca672979-fa6f-458e-a52c-66fef8db369d" />
 
 
-⸻
+
 
 **Role-Based Access Control**
 
@@ -102,7 +102,7 @@ Evidence:
 
 
 
-⸻
+
 
 **Microsoft Entra PIM/PAM**
 
@@ -126,7 +126,7 @@ Evidence:
 <img width="1894" height="724" alt="image" src="https://github.com/user-attachments/assets/4f613680-1656-48f5-aed9-01e3fd418e55" />
 
 
-⸻
+
 
 **Just-in-Time Privileged Access Test**
 
@@ -142,7 +142,7 @@ Result
 
 Evidence:
 
-⸻
+
 
 **Multi-Factor Authentication**
 
@@ -152,7 +152,7 @@ MFA was required during authentication and privileged access activation.
 
 Evidence:
 
-⸻
+
 
 **Microsoft Sentinel Integration**
 
@@ -167,7 +167,7 @@ Monitored:
 
 Evidence:
 
-⸻
+
 
 **Authentication Investigation**
 
@@ -193,7 +193,7 @@ Evidence:
 
 
 
-⸻
+
 
 **PIM Activity Investigation**
 
@@ -226,7 +226,7 @@ Evidence:
 <img width="953" height="446" alt="pim audit log" src="https://github.com/user-attachments/assets/327731f2-e212-46e1-a635-f2d6288975b5" />
 
 
-⸻
+
 
 **PIM Activation Evidence**
 
@@ -241,7 +241,7 @@ The events demonstrated:
 
 Evidence:
 
-⸻
+
 
 **Identity Activity Correlation**
 
@@ -258,7 +258,7 @@ The investigation process:
 7. Determine whether the activity was authorized.
 
 
-⸻
+
 
 **Investigation**
 
@@ -272,7 +272,7 @@ This demonstrated an identity-focused SOC investigation workflow:
 
 Authentication → Activity Review → Privileged Access → PIM Audit → Correlation → Investigation
 
-⸻
+
 
 **Security Controls Demonstrated**
 
@@ -292,7 +292,7 @@ Authentication → Activity Review → Privileged Access → PIM Audit → Corre
 * Identity activity correlation
 * Security investigation
 
-⸻
+
 
 **Skills Demonstrated**
 
@@ -312,7 +312,7 @@ Authentication → Activity Review → Privileged Access → PIM Audit → Corre
 * Privileged access monitoring
 * Hybrid identity management
 
-⸻
+
 
 **Challenges and Troubleshooting**
 
@@ -334,7 +334,7 @@ Identity Monitoring
 
 Validated that PIM events appeared in AuditLogs and used RoleManagement filtering to isolate privileged activity.
 
-⸻
+
 
 **Final Results**
 
@@ -355,7 +355,7 @@ The completed lab demonstrates a functional hybrid IAM security environment with
 * PIM activity monitoring
 * Identity activity correlation
 
-⸻
+
 
 **Evidence Gallery**
 
@@ -363,7 +363,7 @@ All screenshots supporting this project are stored in the screenshots/ directory
 
 The evidence demonstrates the configuration, testing, successful operations, denied operations, privileged access activation, expiration, authentication activity, and Sentinel monitoring results.
 
-⸻
+
 
 **Conclusion**
 
