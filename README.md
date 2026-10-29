@@ -1,4 +1,4 @@
-Hybrid IAM, PIM/PAM & Microsoft Sentinel Identity Monitoring Lab
+**Hybrid IAM, PIM/PAM & Microsoft Sentinel Identity Monitoring Lab**
 
  **Project Overview**
 
